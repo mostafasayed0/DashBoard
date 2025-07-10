@@ -1,16 +1,16 @@
 {
   "events": [
     {
-      "id": "4",
+      "id": "1",
       "name": "مهرجان الصيف الغنائي",
       "date": "2025-08-10",
       "tickets": 1000,
       "location": "ساحة أرينا - دبي",
       "price": 300,
-      "organizerId": "4"
+      "organizerId": "2"
     },
     {
-      "id": "5",
+      "id": "2",
       "name": "مؤتمر التكنولوجيا",
       "date": "2025-09-05",
       "tickets": 500,
@@ -19,12 +19,21 @@
       "organizerId": "6"
     },
     {
-      "id": "6",
+      "id": "3",
       "name": "عرض سيرك عالمي",
       "date": "2025-07-28",
       "tickets": 700,
       "location": "سيرك المدينة - جدة",
       "price": 150,
+      "organizerId": "4"
+    },
+    {
+      "id": "4",
+      "name": "عمرو خيرت",
+      "date": "2025-07-28",
+      "tickets": 300,
+      "location": "دار الاوبرا",
+      "price": 200,
       "organizerId": "8"
     }
   ],
@@ -45,13 +54,6 @@
       "id": "2",
       "name": "Sara",
       "email": "sara@gmail.com",
-      "tickets": [
-        10,
-        20,
-        30,
-        10,
-        10
-      ],
       "createdAt": "2025-03-15T14:30:00Z",
       "role": "organizer"
     },
@@ -73,10 +75,6 @@
       "id": "4",
       "name": "ali ",
       "email": "sara@gmail.com",
-      "tickets": [
-        20,
-        21
-      ],
       "createdAt": "2025-05-15T17:30:00Z",
       "role": "organizer"
     },
@@ -84,11 +82,7 @@
       "id": "5",
       "name": " sayed",
       "email": "sara@gmail.com",
-      "tickets": [
-        50,
-        51,
-        51
-      ],
+
       "createdAt": "2025-06-15T20:30:00Z",
       "role": "user"
     },
@@ -96,13 +90,9 @@
       "id": "6",
       "name": " sayed",
       "email": "sara@gmail.com",
-      "tickets": [
-        50,
-        51,
-        51
-      ],
+
       "createdAt": "2025-09-15T12:30:00Z",
-      "role": "organizer"
+      "role": "user"
     },
     {
       "id": "7",
@@ -120,13 +110,9 @@
       "id": "8",
       "name": " sayed",
       "email": "sara@gmail.com",
-      "tickets": [
-        50,
-        51,
-        51
-      ],
+
       "createdAt": "2025-09-15T12:30:00Z",
-      "role": "organizer"
+      "role": "user"
     }
   ],
   "tickets": [
@@ -140,7 +126,7 @@
       "id": "2",
       "eventId": 2,
       "userId": 2,
-      "status": "pending"
+      "status": "confirmed"
     },
     {
       "id": "3",
@@ -153,6 +139,243 @@
       "eventId": 4,
       "userId": 4,
       "status": "pending"
+    },
+    {
+      "id": "5",
+      "eventId": 4,
+      "userId": 5,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
     }
+    ,
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    }
+    ,
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    }
+    ,
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    }
+    ,
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    }
+    ,
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    }
+    ,
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    }
+    ,
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6",
+      "eventId": 4,
+      "userId": 6,
+      "status": "pending"
+    }
+ 
+    
   ]
 }

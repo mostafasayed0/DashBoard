@@ -42,7 +42,20 @@ export class UsersComponent implements OnInit {
   ngOnInit(): void {
     this._AppService.getusers().subscribe({
       next: (data: User[]) => {
-        this.Users = data;
+        this.Users = data.map((user) => ({
+          ...user,
+          tickets: user.tickets || [], 
+        }));
+
+        this.usersOnly = this.Users.filter(
+          (user: User) => user.role === 'user'
+        );
+        this.organizersOnly = this.Users.filter(
+          (user: User) => user.role === 'organizer'
+        );
+
+        // Initialize filtered arrays
+        this.filteredUsers = this.usersOnly;
 
         this.usersOnly = data.filter((user: User) => user.role === 'user');
         this.organizersOnly = data.filter(
