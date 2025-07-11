@@ -4,6 +4,8 @@
         "getevent",
         "getevents",
         "getusers",
-        "Tazkarti"
+        "Tazkarti",
+        "toastr",
+        "Tokin"
     ]
 }

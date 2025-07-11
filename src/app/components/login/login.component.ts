@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { AppService } from '../../core/services/App.service';
 
 
 @Component({
@@ -15,7 +16,8 @@ export class LoginComponent {
   constructor(
     private _FormBuilder: FormBuilder,
     private _Router: Router,
-    private _toastr: ToastrService
+    private _toastr: ToastrService,
+    private _AppService:AppService
   ) {}
   isLoading: boolean = false;
   showPassword: boolean = false;
@@ -28,6 +30,7 @@ export class LoginComponent {
     this.isLoading = true;
 
     if (this.LoginForm.valid) {
+      this._AppService.Tokin=true
       console.log(this.LoginForm.value);
       this._toastr.success('Success', 'Hello Admin', {
         timeOut: 3000,

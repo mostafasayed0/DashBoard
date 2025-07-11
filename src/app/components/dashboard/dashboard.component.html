@@ -85,9 +85,7 @@
               <i class="fas fa-chart-line me-2"></i>
               Users Growth
             </h3>
-            <div class="chart-actions">
-              <button class="btn btn-sm btn-outline-primary">Export</button>
-            </div>
+
           </div>
           <div class="chart-body">
             @if (usersLineChartData().length > 0) {
@@ -214,7 +212,7 @@
           <i class="fas fa-clock me-2"></i>
           Latest Events
         </h3>
-        <a href="/events" class="btn btn-outline-primary btn-sm">
+        <a routerLink="/events" class="btn btn-outline-primary btn-sm">
           <i class="fas fa-external-link-alt me-1"></i>
           View All
         </a>

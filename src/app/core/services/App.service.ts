@@ -11,7 +11,7 @@ import { Tickets, EventTicketStats } from '../interfaces/tickets';
 })
 export class AppService {
   constructor(private _HttpClient: HttpClient) {}
-
+  Tokin:boolean=false
   getusers(): Observable<any> {
     return this._HttpClient.get(`${environment.BASE_URL}/users`);
   }
@@ -63,7 +63,7 @@ export class AppService {
       const pendingTickets = eventTickets.filter(ticket => ticket.status === 'pending').length;
       const reservedTickets = confirmedTickets + pendingTickets;
       const availableTickets = event.tickets - reservedTickets;
-      
+
       const reservedPercentage = event.tickets > 0 ? Math.round((reservedTickets / event.tickets) * 100) : 0;
       const availablePercentage = 100 - reservedPercentage;
 

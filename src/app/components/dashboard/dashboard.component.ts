@@ -7,16 +7,16 @@ import { forkJoin } from 'rxjs';
 import { User } from '../../core/interfaces/user';
 import { Tickets } from '../../core/interfaces/tickets';
 import { AppEvent } from '../../core/interfaces/event';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, NgxChartsModule],
+  imports: [CommonModule, NgxChartsModule ,RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  // الإشارات (Signals)
   chartData = signal<{ name: string; value: number }[]>([]);
   latestEvents = signal<AppEvent[]>([]);
   usersLineChartData = signal<any[]>([]);
@@ -27,11 +27,8 @@ export class DashboardComponent implements OnInit {
 
   curve = shape.curveBasis;
 
-  // New properties for enhanced dashboard
   currentDate = new Date();
-  colorScheme = {
-    domain: ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe']
-  };
+
 
   constructor(private http: HttpClient) {}
 
