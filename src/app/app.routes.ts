@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { loginGuard } from './core/guards/login.guard';
+import { WaitingEventsComponent } from './components/waiting-events/waiting-events.component';
 
 export const routes: Routes = [
   {
@@ -12,7 +13,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    canActivate:[loginGuard],
+    canActivate: [loginGuard],
     loadComponent: () =>
       import('./layouts/admin-dashboard/admin-dashboard.component').then(
         (m) => m.AdminDashboardComponent
@@ -62,6 +63,14 @@ export const routes: Routes = [
             (m) => m.UpdateComponent
           ),
         title: 'Update',
+      },
+      {
+        path: 'waiting',
+        loadComponent: () =>
+          import('./components/waiting-events/waiting-events.component').then(
+            (m) => m.WaitingEventsComponent
+          ),
+        title: 'Notifications',
       },
     ],
   },
