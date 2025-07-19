@@ -3,12 +3,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AppService } from '../../core/services/App.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule ,TranslateModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
@@ -19,6 +20,7 @@ export class LoginComponent {
     private _toastr: ToastrService,
     private _AppService:AppService
   ) {}
+  now:boolean = false;
   isLoading: boolean = false;
   showPassword: boolean = false;
   LoginForm: FormGroup = this._FormBuilder.group({

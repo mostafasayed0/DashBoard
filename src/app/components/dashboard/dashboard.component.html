@@ -5,7 +5,7 @@
       <div class="col-md-8">
         <h1 class="display-5 fw-bold text-gradient mb-2">
           <i class="fas fa-tachometer-alt me-3"></i>
-          Dashboard Overview
+          {{ 'dashboard.Dashboard Overview' | translate }}
         </h1>
       </div>
       <div class="col-md-4 text-md-end">
@@ -29,10 +29,10 @@
           </div>
           <div class="stat-content">
             <h3 class="stat-number">{{ usersCount() }}</h3>
-            <p class="stat-label">Total Users</p>
+            <p class="stat-label">{{ 'dashboard.Total Users' | translate }}</p>
             <div class="stat-trend">
               <i class="fas fa-arrow-up text-success"></i>
-              <span class="trend-text">+12% this month</span>
+              <span class="trend-text">{{ 'dashboard.+12% this month' | translate }}</span>
             </div>
           </div>
         </div>
@@ -45,10 +45,10 @@
           </div>
           <div class="stat-content">
             <h3 class="stat-number">{{ eventsCount() }}</h3>
-            <p class="stat-label">Active Events</p>
+            <p class="stat-label">{{ 'dashboard.Active Events' | translate }}</p>
             <div class="stat-trend">
               <i class="fas fa-arrow-up text-success"></i>
-              <span class="trend-text">+8% this week</span>
+              <span class="trend-text">{{ 'dashboard.+8% this week' | translate }}</span>
             </div>
           </div>
         </div>
@@ -61,10 +61,10 @@
           </div>
           <div class="stat-content">
             <h3 class="stat-number">{{ ticketsCount() }}</h3>
-            <p class="stat-label">Tickets Sold</p>
+            <p class="stat-label">{{ 'dashboard.Tickets Sold' | translate }}</p>
             <div class="stat-trend">
               <i class="fas fa-arrow-up text-success"></i>
-              <span class="trend-text">+15% today</span>
+              <span class="trend-text">{{ 'dashboard.+15% today' | translate }}</span>
             </div>
           </div>
         </div>
@@ -83,7 +83,7 @@
           <div class="chart-header">
             <h3 class="chart-title">
               <i class="fas fa-chart-line me-2"></i>
-              Users Growth
+              {{ 'dashboard.Users Growth' | translate }}
             </h3>
 
           </div>
@@ -110,7 +110,7 @@
                 <div class="loading-spinner">
                   <i class="fas fa-spinner fa-spin"></i>
                 </div>
-                <p>Loading chart data...</p>
+                <p>{{ 'dashboard.Loading chart data...' | translate }}</p>
               </div>
             }
           </div>
@@ -123,7 +123,7 @@
           <div class="quick-stats-header">
             <h3 class="quick-stats-title">
               <i class="fas fa-chart-pie me-2"></i>
-              Quick Stats
+              {{ 'dashboard.Quick Stats' | translate }}
             </h3>
           </div>
           <div class="quick-stats-body">
@@ -133,7 +133,7 @@
               </div>
               <div class="quick-stat-content">
                 <h4>{{ newUsersThisMonth() }}</h4>
-                <p>New Users This Month</p>
+                <p>{{ 'dashboard.New Users This Month' | translate }}</p>
               </div>
             </div>
 
@@ -143,7 +143,7 @@
               </div>
               <div class="quick-stat-content">
                 <h4>{{ upcomingEvents() }}</h4>
-                <p>Upcoming Events</p>
+                <p>{{ 'dashboard.Upcoming Events' | translate }}</p>
               </div>
             </div>
 
@@ -153,7 +153,7 @@
               </div>
               <div class="quick-stat-content">
                 <h4>{{ averageRating() }}</h4>
-                <p>Average Event Rating</p>
+                <p>{{ 'dashboard.Average Event Rating' | translate }}</p>
               </div>
             </div>
           </div>
@@ -170,7 +170,7 @@
       <div class="chart-header">
         <h3 class="chart-title">
           <i class="fas fa-chart-bar me-2"></i>
-          Platform Statistics
+          {{ 'dashboard.Platform Statistics' | translate }}
         </h3>
       </div>
       <div class="chart-body">
@@ -195,7 +195,7 @@
             <div class="loading-spinner">
               <i class="fas fa-spinner fa-spin"></i>
             </div>
-            <p>Loading statistics...</p>
+            <p>{{ 'dashboard.Loading statistics...' | translate }}</p>
           </div>
         }
       </div>
@@ -210,11 +210,11 @@
       <div class="events-header">
         <h3 class="events-title">
           <i class="fas fa-clock me-2"></i>
-          Latest Events
+          {{ 'dashboard.Latest Events' | translate }}
         </h3>
         <a routerLink="/events" class="btn btn-outline-primary btn-sm">
           <i class="fas fa-external-link-alt me-1"></i>
-          View All
+          {{ 'dashboard.View All Events' | translate }}
         </a>
       </div>
 
@@ -224,10 +224,10 @@
             <table class="events-table">
               <thead>
                 <tr>
-                  <th>Event Name</th>
-                  <th>Location</th>
-                  <th>Date</th>
-                  <th>Status</th>
+                  <th>{{ 'dashboard.Event Name' | translate }}</th>
+                  <th>{{ 'dashboard.Location' | translate }}</th>
+                  <th>{{ 'dashboard.Date' | translate }}</th>
+                  <th>{{ 'dashboard.Status' | translate }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -268,7 +268,7 @@
             <div class="loading-spinner">
               <i class="fas fa-spinner fa-spin"></i>
             </div>
-            <p>Loading events...</p>
+            <p>{{ 'dashboard.Loading events...' | translate }}</p>
           </div>
         }
       </div>

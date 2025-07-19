@@ -3,16 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EventTicketStats } from '../../core/interfaces/tickets';
 import { AppService } from '../../core/services/App.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-tickets',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule ,TranslateModule],
   templateUrl: './tickets.component.html',
   styleUrl: './tickets.component.scss'
 })
 export class TicketsComponent implements OnInit {
-  
+
   events: EventTicketStats[] = [];
   filteredEvents: EventTicketStats[] = [];
   searchTerm: string = '';
@@ -62,7 +63,7 @@ export class TicketsComponent implements OnInit {
   }
 
   filterEvents() {
-    let filtered = this.events.filter(event => 
+    let filtered = this.events.filter(event =>
       event.eventName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       event.eventLocation.toLowerCase().includes(this.searchTerm.toLowerCase())
     );

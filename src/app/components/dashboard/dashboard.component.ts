@@ -8,11 +8,12 @@ import { User } from '../../core/interfaces/user';
 import { Tickets } from '../../core/interfaces/tickets';
 import { AppEvent } from '../../core/interfaces/event';
 import { RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, NgxChartsModule ,RouterLink],
+  imports: [CommonModule, NgxChartsModule ,RouterLink , TranslateModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })

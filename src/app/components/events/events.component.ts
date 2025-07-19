@@ -4,11 +4,12 @@ import { AppEvent } from '../../core/interfaces/event';
 import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-events',
   standalone: true,
-  imports: [DatePipe, RouterLink, FormsModule],
+  imports: [DatePipe, RouterLink, FormsModule ,TranslateModule],
   templateUrl: './events.component.html',
   styleUrl: './events.component.scss',
 })

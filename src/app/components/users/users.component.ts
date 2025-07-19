@@ -3,11 +3,12 @@ import { User } from '../../core/interfaces/user';
 import { AppService } from '../../core/services/App.service';
 import { AppEvent } from '../../core/interfaces/event';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule ,TranslateModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
@@ -15,7 +16,7 @@ export class UsersComponent implements OnInit {
   Users!: User[];
   usersOnly: User[] = [];
   organizersOnly: User[] = [];
-  
+
   // Filtered arrays for search functionality
   filteredUsers: User[] = [];
   filteredOrganizers: {
@@ -24,7 +25,7 @@ export class UsersComponent implements OnInit {
     email: string;
     eventNames: string[];
   }[] = [];
-  
+
   organizersWithEvents: {
     id: string;
     name: string;
@@ -44,7 +45,7 @@ export class UsersComponent implements OnInit {
       next: (data: User[]) => {
         this.Users = data.map((user) => ({
           ...user,
-          tickets: user.tickets || [], 
+          tickets: user.tickets || [],
         }));
 
         this.usersOnly = this.Users.filter(
@@ -61,7 +62,7 @@ export class UsersComponent implements OnInit {
         this.organizersOnly = data.filter(
           (user: User) => user.role === 'organizer'
         );
-        
+
         // Initialize filtered arrays
         this.filteredUsers = this.usersOnly;
 
@@ -78,7 +79,7 @@ export class UsersComponent implements OnInit {
                 eventNames: userEvents.map((ev) => ev.name),
               };
             });
-            
+
             // Initialize filtered organizers
             this.filteredOrganizers = this.organizersWithEvents;
           },
@@ -100,13 +101,13 @@ export class UsersComponent implements OnInit {
       this.filteredOrganizers = this.organizersWithEvents;
     } else {
       const searchLower = this.searchTerm.toLowerCase();
-      
+
       // Filter users
       this.filteredUsers = this.usersOnly.filter(user =>
         user.name.toLowerCase().includes(searchLower) ||
         user.email.toLowerCase().includes(searchLower)
       );
-      
+
       // Filter organizers
       this.filteredOrganizers = this.organizersWithEvents.filter(org =>
         org.name.toLowerCase().includes(searchLower) ||
@@ -121,12 +122,12 @@ export class UsersComponent implements OnInit {
   //     this._AppService.deleteUser(user.id).subscribe({
   //       next: (data) => {
   //         console.log("User deleted", data);
-          
+
   //         // Remove from arrays
   //         this.Users = this.Users.filter(u => u.id !== user.id);
   //         this.usersOnly = this.usersOnly.filter(u => u.id !== user.id);
   //         this.organizersOnly = this.organizersOnly.filter(u => u.id !== user.id);
-          
+
   //         // Re-filter
   //         this.filterUsers();
   //       },
