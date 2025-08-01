@@ -5,15 +5,27 @@ import { environment } from '../../environment/environment';
 import { AppEvent } from '../interfaces/event';
 import { User } from '../interfaces/user';
 import { Tickets, EventTicketStats } from '../interfaces/tickets';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppService {
   constructor(private _HttpClient: HttpClient) {}
-  Tokin:boolean=false
   getusers(): Observable<any> {
     return this._HttpClient.get(`${environment.BASE_URL}/users`);
+  }
+
+  login(adminData: object): Observable<any> {
+    return this._HttpClient.post(`http://localhost:5000/auth/login`, adminData);
+  }
+
+  saveUserData(): void {
+    if (localStorage.getItem('userToken') !== null) {
+      // ! ده هنا حل عشان اضمنله ان فى داتا جاية
+      // رغم انى متاكد انى ف داتا عشان االكوندشن بس الباكج عايزة تطمن
+      jwtDecode(localStorage.getItem('userToken')!);
+    }
   }
 
   getevents(): Observable<any> {
@@ -39,13 +51,12 @@ export class AppService {
     return this._HttpClient.delete(`${environment.BASE_URL}/events/${id}`);
   }
 
-  // New methods for tickets page
   getEventTicketStats(): Observable<EventTicketStats[]> {
-    return new Observable(observer => {
+    return new Observable((observer) => {
       // Get all data
-      this.getevents().subscribe(events => {
-        this.getTickets().subscribe(tickets => {
-          this.getusers().subscribe(users => {
+      this.getevents().subscribe((events) => {
+        this.getTickets().subscribe((tickets) => {
+          this.getusers().subscribe((users) => {
             const stats = this.calculateTicketStats(events, tickets, users);
             observer.next(stats);
             observer.complete();
@@ -55,16 +66,28 @@ export class AppService {
     });
   }
 
-  private calculateTicketStats(events: AppEvent[], tickets: Tickets[], users: User[]): EventTicketStats[] {
-    return events.map(event => {
-      // Count tickets for this event
-      const eventTickets = tickets.filter(ticket => ticket.eventId === parseInt(event.id));
-      const confirmedTickets = eventTickets.filter(ticket => ticket.status === 'confirmed').length;
-      const pendingTickets = eventTickets.filter(ticket => ticket.status === 'pending').length;
+  private calculateTicketStats(
+    events: AppEvent[],
+    tickets: Tickets[],
+    users: User[]
+  ): EventTicketStats[] {
+    return events.map((event) => {
+      const eventTickets = tickets.filter(
+        (ticket) => ticket.eventId === parseInt(event.id)
+      );
+      const confirmedTickets = eventTickets.filter(
+        (ticket) => ticket.status === 'confirmed'
+      ).length;
+      const pendingTickets = eventTickets.filter(
+        (ticket) => ticket.status === 'pending'
+      ).length;
       const reservedTickets = confirmedTickets + pendingTickets;
       const availableTickets = event.tickets - reservedTickets;
 
-      const reservedPercentage = event.tickets > 0 ? Math.round((reservedTickets / event.tickets) * 100) : 0;
+      const reservedPercentage =
+        event.tickets > 0
+          ? Math.round((reservedTickets / event.tickets) * 100)
+          : 0;
       const availablePercentage = 100 - reservedPercentage;
 
       return {
@@ -76,7 +99,7 @@ export class AppService {
         reservedTickets: reservedTickets,
         availableTickets: Math.max(0, availableTickets), // Ensure non-negative
         reservedPercentage: reservedPercentage,
-        availablePercentage: availablePercentage
+        availablePercentage: availablePercentage,
       };
     });
   }

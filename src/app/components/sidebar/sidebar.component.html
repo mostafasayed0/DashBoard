@@ -26,7 +26,7 @@
         <a routerLink="/tickets" routerLinkActive="active" class="nav-link text-white">🎟️ {{'sidebar.Tickets' | translate}}</a>
       </li>
       <li class="nav-item mt-4">
-        <a routerLink="/login" class="btn btn-outline-light w-100">{{'sidebar.Logout' | translate}}</a>
+        <a (click)="logout()" class="btn btn-outline-light w-100">{{'sidebar.Logout' | translate}}</a>
       </li>
     </ul>
   </div>
