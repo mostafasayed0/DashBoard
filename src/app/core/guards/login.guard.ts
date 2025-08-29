@@ -5,18 +5,14 @@ import { AppService } from '../services/App.service';
 export const loginGuard: CanActivateFn = (route, state) => {
   const app = inject(AppService);
   const _Router = inject(Router);
-  if(typeof localStorage !== 'undefined')
-  {
+
+  if (typeof localStorage !== 'undefined') {
     if (localStorage.getItem('userToken') !== null) {
       return true;
     } else {
-      _Router.navigate(['/login']);
-      return false;
+      return _Router.createUrlTree(['/login']);
     }
+  } else {
+    return _Router.createUrlTree(['/login']);
   }
-  else
-  {
-    return false;
-  }
-
 };

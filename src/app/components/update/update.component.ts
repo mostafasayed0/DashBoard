@@ -9,7 +9,7 @@ import { AppEvent } from '../../core/interfaces/event';
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './update.component.html',
-  styleUrl: './update.component.scss',
+  styleUrls: ['./update.component.scss'],
 })
 export class UpdateComponent {
   id: string = '';
@@ -19,7 +19,7 @@ export class UpdateComponent {
   constructor(
     private _fb: FormBuilder,
     private _AppService: AppService,
-    private _ActivatedRoute: ActivatedRoute,
+    private _ActivatedRoute: ActivatedRoute
   ) {
     this._ActivatedRoute.params.subscribe({
       next: (params) => {
@@ -43,27 +43,29 @@ export class UpdateComponent {
   }
 
   initForm() {
-    this.formUpdate =this._fb.group({
-      name: [this.formData.name, [Validators.required , Validators.minLength(3)]],
-      location: [this.formData.location, [Validators.required , Validators.minLength(5)]],
-      date: [this.formData.date, Validators.required],
-      price: [this.formData.price, [Validators.required, Validators.min(0)]],
-      tickets: [
-        this.formData.tickets,
-        [Validators.required],
+    this.formUpdate = this._fb.group({
+      name: [
+        this.formData.title,
+        [Validators.required, Validators.minLength(3)],
       ],
+      location: [
+        this.formData.location.address,
+        [Validators.required, Validators.minLength(5)],
+      ],
+      date: [this.formData.startDate, Validators.required],
+      time: [this.formData.time, [Validators.required]],
+      availableSpots: [this.formData.availableSpots, [Validators.required]],
     });
   }
 
   onSubmit() {
     console.log(this.formUpdate.value);
     const event = this.formUpdate.value;
-    this._AppService.updateEvent(event , this.id).subscribe({
-      next:(data)=>{
-        console.log("updated" , data);
-      }
-    })
-
+    this._AppService.updateEvent(event, this.id).subscribe({
+      next: (data) => {
+        console.log('updated', data);
+      },
+    });
   }
 }
 

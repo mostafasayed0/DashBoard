@@ -18,60 +18,84 @@
   </div>
 </div>
 
-<!-- Statistics Cards -->
-<div class="stats-section">
-  <div class="container-fluid">
-    <div class="row g-4">
-      <div class="col-lg-3 col-md-6">
-        <div class="stat-card users-card">
-          <div class="stat-icon">
-            <i class="fas fa-users"></i>
-          </div>
-          <div class="stat-content">
-            <h3 class="stat-number">{{ usersCount() }}</h3>
-            <p class="stat-label">{{ 'dashboard.Total Users' | translate }}</p>
-            <div class="stat-trend">
-              <i class="fas fa-arrow-up text-success"></i>
-              <span class="trend-text">{{ 'dashboard.+12% this month' | translate }}</span>
+<!-- Error State -->
+@if (hasError()) {
+  <div class="alert alert-danger" role="alert">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    {{ 'dashboard.Error loading dashboard data. Please try again.' | translate }}
+    <button class="btn btn-outline-danger btn-sm ms-3" (click)="loadDashboardData()">
+      <i class="fas fa-redo me-1"></i>
+      {{ 'dashboard.Retry' | translate }}
+    </button>
+  </div>
+}
+
+<!-- Loading State -->
+@if (isLoading()) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3">{{ 'dashboard.Loading dashboard data...' | translate }}</p>
+  </div>
+}
+
+<!-- Dashboard Content -->
+@if (!isLoading() && !hasError()) {
+  <!-- Statistics Cards -->
+  <div class="stats-section">
+    <div class="container-fluid">
+      <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+          <div class="stat-card users-card">
+            <div class="stat-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+              <h3 class="stat-number">{{ usersCount() }}</h3>
+              <p class="stat-label">{{ 'dashboard.Total Users' | translate }}</p>
+              <div class="stat-trend">
+                <i class="fas fa-arrow-up text-success"></i>
+                <span class="trend-text">{{ 'dashboard.+12% this month' | translate }}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="col-lg-3 col-md-6">
-        <div class="stat-card events-card">
-          <div class="stat-icon">
-            <i class="fas fa-calendar-alt"></i>
-          </div>
-          <div class="stat-content">
-            <h3 class="stat-number">{{ eventsCount() }}</h3>
-            <p class="stat-label">{{ 'dashboard.Active Events' | translate }}</p>
-            <div class="stat-trend">
-              <i class="fas fa-arrow-up text-success"></i>
-              <span class="trend-text">{{ 'dashboard.+8% this week' | translate }}</span>
+        <div class="col-lg-3 col-md-6">
+          <div class="stat-card events-card">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="stat-content">
+              <h3 class="stat-number">{{ eventsCount() }}</h3>
+              <p class="stat-label">{{ 'dashboard.Active Events' | translate }}</p>
+              <div class="stat-trend">
+                <i class="fas fa-arrow-up text-success"></i>
+                <span class="trend-text">{{ 'dashboard.+8% this week' | translate }}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="col-lg-3 col-md-6">
-        <div class="stat-card tickets-card">
-          <div class="stat-icon">
-            <i class="fas fa-ticket-alt"></i>
-          </div>
-          <div class="stat-content">
-            <h3 class="stat-number">{{ ticketsCount() }}</h3>
-            <p class="stat-label">{{ 'dashboard.Tickets Sold' | translate }}</p>
-            <div class="stat-trend">
-              <i class="fas fa-arrow-up text-success"></i>
-              <span class="trend-text">{{ 'dashboard.+15% today' | translate }}</span>
+        <div class="col-lg-3 col-md-6">
+          <div class="stat-card tickets-card">
+            <div class="stat-icon">
+              <i class="fas fa-ticket-alt"></i>
+            </div>
+            <div class="stat-content">
+              <h3 class="stat-number">{{ ticketsCount() }}</h3>
+              <p class="stat-label">{{ 'dashboard.Tickets Sold' | translate }}</p>
+              <div class="stat-trend">
+                <i class="fas fa-arrow-up text-success"></i>
+                <span class="trend-text">{{ 'dashboard.+15% today' | translate }}</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
 <!-- Charts Section -->
 <div class="charts-section">
@@ -231,31 +255,31 @@
                 </tr>
               </thead>
               <tbody>
-                @for (event of latestEvents(); track event.id) {
+                @for (event of latestEvents(); track event._id) {
                   <tr>
                     <td>
                       <div class="event-info">
                         <div class="event-icon">
                           <i class="fas fa-calendar"></i>
                         </div>
-                        <span class="event-name">{{ event.name }}</span>
+                        <span class="event-name">{{ event.title || event.title || 'No Title' }}</span>
                       </div>
                     </td>
                     <td>
-                      <div class="location-info">
-                        <i class="fas fa-map-marker-alt me-1"></i>
-                        {{ event.location }}
-                      </div>
+                     <div class="location-info">
+                    <i class="fas fa-map-marker-alt me-1"></i>
+                    {{ event.location ? (event.location.venue + ', ' + event.location.city + ', ' + event.location.address) : 'No Location' }}
+                  </div>
                     </td>
                     <td>
                       <div class="date-info">
                         <i class="fas fa-calendar-day me-1"></i>
-                        {{ event.date | date:'MMM dd, yyyy' }}
+                        {{ event.startDate ? (event.startDate | date:'MMM dd, yyyy') : 'No Date' }}
                       </div>
                     </td>
                     <td>
-                      <span class="status-badge" [class]="getEventStatus(event.date)">
-                        {{ getEventStatusText(event.date) }}
+                      <span class="status-badge" [class]="getEventStatus(event.startDate || '')">
+                        {{ getEventStatusText(event.startDate || '') }}
                       </span>
                     </td>
                   </tr>
@@ -269,9 +293,14 @@
               <i class="fas fa-spinner fa-spin"></i>
             </div>
             <p>{{ 'dashboard.Loading events...' | translate }}</p>
+            <small class="text-muted">Events count: {{ latestEvents().length }}</small>
+            <br>
+            <small class="text-muted">Total events from API: {{ eventsCount() }}</small>
           </div>
         }
       </div>
     </div>
   </div>
 </div>
+
+}

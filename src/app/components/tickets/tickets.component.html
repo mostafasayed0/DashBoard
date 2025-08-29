@@ -37,7 +37,7 @@
           <i class="fas fa-tickets"></i>
         </div>
         <div class="stat-content">
-          <h3 class="stat-number">{{ totalTickets }}</h3>
+          <h3 class="stat-number">{{ totalTickets?.length }}</h3>
           <p class="stat-label">{{ 'tickets.Total Tickets' | translate }}</p>
         </div>
       </div>
@@ -105,9 +105,10 @@
             <div class="event-title">
               <h3>{{ event.eventName }}</h3>
               <span class="event-location">
-                <i class="fas fa-map-marker-alt"></i>
-                {{ event.eventLocation }}
-              </span>
+  <i class="fas fa-map-marker-alt"></i>
+  {{ event.eventLocation ? (event.eventLocation.venue + ', ' + event.eventLocation.city ) : 'No Location' }}
+</span>
+
             </div>
             <div class="event-status">
               <span class="status-badge" [class]="getStatusClass(event)">
@@ -118,14 +119,14 @@
 
           <div class="event-date">
             <i class="fas fa-calendar"></i>
-            {{ event.eventDate }}
+            {{ event.eventDate | date: 'MMM dd, yyyy' }}
           </div>
 
           <div class="tickets-overview">
             <div class="tickets-total">
               <div class="ticket-stat">
                 <span class="stat-label">{{ 'tickets.Total Tickets' | translate }}</span>
-                <span class="stat-value">{{ event.totalTickets }}</span>
+                <span class="stat-value">{{ totalTickets?.length }}</span>
               </div>
             </div>
 

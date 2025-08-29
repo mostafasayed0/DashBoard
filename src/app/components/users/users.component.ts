@@ -4,11 +4,12 @@ import { AppService } from '../../core/services/App.service';
 import { AppEvent } from '../../core/interfaces/event';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [FormsModule ,TranslateModule],
+  imports: [FormsModule, TranslateModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
@@ -17,126 +18,126 @@ export class UsersComponent implements OnInit {
   usersOnly: User[] = [];
   organizersOnly: User[] = [];
 
-  // Filtered arrays for search functionality
   filteredUsers: User[] = [];
   filteredOrganizers: {
     id: string;
-    name: string;
+    firstName: string;
     email: string;
+    organizationName?: string;
     eventNames: string[];
+    eventsCount: number;
   }[] = [];
 
-  organizersWithEvents: {
-    id: string;
-    name: string;
-    email: string;
-    eventNames: string[];
-  }[] = [];
 
-  // Search and filter properties
+
   searchTerm: string = '';
   showUsers: boolean = true;
   showOrganizers: boolean = true;
 
   private _AppService = inject(AppService);
+  private spinner = inject(NgxSpinnerService);
 
   ngOnInit(): void {
+    this.spinner.show();
+    setTimeout(() => this.spinner.hide(), 1000);
+
     this._AppService.getusers().subscribe({
       next: (data: User[]) => {
+        console.log('Users data:', data);
+
         this.Users = data.map((user) => ({
           ...user,
-          tickets: user.tickets || [],
+          tickets: user.ticketsBooked || [],
         }));
 
-        this.usersOnly = this.Users.filter(
-          (user: User) => user.role === 'user'
-        );
+        this.usersOnly = this.Users.filter((user) => user.role === 'user');
         this.organizersOnly = this.Users.filter(
-          (user: User) => user.role === 'organizer'
+          (user) => user.role === 'organizer'
         );
 
-        // Initialize filtered arrays
-        this.filteredUsers = this.usersOnly;
+        console.log('Users only:', this.usersOnly.length);
+        console.log('Organizers only:', this.organizersOnly.length);
+        console.log('Organizers data:', this.organizersOnly);
 
-        this.usersOnly = data.filter((user: User) => user.role === 'user');
-        this.organizersOnly = data.filter(
-          (user: User) => user.role === 'organizer'
-        );
+        // إذا لم يكن هناك منظمين، نعرض رسالة
+        if (this.organizersOnly.length === 0) {
+          console.warn('No organizers found in the data');
+        }
 
-        // Initialize filtered arrays
-        this.filteredUsers = this.usersOnly;
+        this.filteredUsers = [...this.usersOnly];
 
         this._AppService.getevents().subscribe({
           next: (events: AppEvent[]) => {
-            this.organizersWithEvents = this.organizersOnly.map((org) => {
-              const userEvents = events.filter(
-                (event) => event.organizerId === org.id
-              );
-              return {
-                id: org.id,
-                name: org.name,
-                email: org.email,
-                eventNames: userEvents.map((ev) => ev.name),
-              };
-            });
+            console.log('Events data:', events);
+            console.log(
+              'Events with organizers:',
+              events.filter((e) => e.organizer)
+            );
 
-            // Initialize filtered organizers
-            this.filteredOrganizers = this.organizersWithEvents;
+
+            // تحديث المنظمين المعروضين
+            console.log('Filtered organizers:', this.filteredOrganizers);
+
+            // إذا لم يكن هناك منظمين مع أحداث، نعرض المنظمين بدون أحداث
+            if (
+              this.organizersOnly.length > 0
+            ) {
+              console.log(
+                'No organizers with events found, showing all organizers'
+              );
+
+
+            }
           },
           error: (err) => {
-            console.log(err);
+            console.error('Error fetching events:', err);
           },
         });
       },
       error: (err) => {
-        console.log(err);
+        console.error('Error fetching users:', err);
+        this.spinner.hide();
       },
     });
   }
 
-  // Search and filter functionality
   filterUsers() {
     if (!this.searchTerm.trim()) {
-      this.filteredUsers = this.usersOnly;
-      this.filteredOrganizers = this.organizersWithEvents;
+      this.filteredUsers = [...this.usersOnly];
     } else {
       const searchLower = this.searchTerm.toLowerCase();
 
-      // Filter users
-      this.filteredUsers = this.usersOnly.filter(user =>
-        user.name.toLowerCase().includes(searchLower) ||
-        user.email.toLowerCase().includes(searchLower)
+      this.filteredUsers = this.usersOnly.filter(
+        (user) =>
+          user.name?.toLowerCase().includes(searchLower) ||
+          user.userName?.toLowerCase().includes(searchLower) ||
+          user.username?.toLowerCase().includes(searchLower) ||
+          user.email?.toLowerCase().includes(searchLower)
       );
 
-      // Filter organizers
-      this.filteredOrganizers = this.organizersWithEvents.filter(org =>
-        org.name.toLowerCase().includes(searchLower) ||
-        org.email.toLowerCase().includes(searchLower)
-      );
+      // this.filteredOrganizers = this.organizersOnly.filter(
+      //   (org) =>
+      //     org.firstName?.toLowerCase().includes(searchLower) ||
+      //     org.email?.toLowerCase().includes(searchLower)
+      // );
     }
   }
 
-  // Delete user functionality
-  // deleteUser(user: User | any) {
-  //   if (confirm('Are you sure you want to delete this user?')) {
-  //     this._AppService.deleteUser(user.id).subscribe({
-  //       next: (data) => {
-  //         console.log("User deleted", data);
+  // تبديل عرض المستخدمين
+  showUsersOnly() {
+    this.showUsers = true;
+    this.showOrganizers = false;
+  }
 
-  //         // Remove from arrays
-  //         this.Users = this.Users.filter(u => u.id !== user.id);
-  //         this.usersOnly = this.usersOnly.filter(u => u.id !== user.id);
-  //         this.organizersOnly = this.organizersOnly.filter(u => u.id !== user.id);
+  // تبديل عرض المنظمين
+  showOrganizersOnly() {
+    this.showUsers = false;
+    this.showOrganizers = true;
+  }
 
-  //         // Re-filter
-  //         this.filterUsers();
-  //       },
-  //       error: (err) => {
-  //         console.log("Error deleting user", err);
-  //       }
-  //     });
-  //   }
-  // }
+  // عرض الكل
+  showAll() {
+    this.showUsers = true;
+    this.showOrganizers = true;
+  }
 }
-
-
