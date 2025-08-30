@@ -21,14 +21,14 @@ export class UsersComponent implements OnInit {
   filteredUsers: User[] = [];
   filteredOrganizers: {
     id: string;
-    firstName: string;
+    name?: string;
+    userName?: string;
+    firstName?: string;
     email: string;
     organizationName?: string;
     eventNames: string[];
     eventsCount: number;
   }[] = [];
-
-
 
   searchTerm: string = '';
   showUsers: boolean = true;
@@ -57,37 +57,31 @@ export class UsersComponent implements OnInit {
 
         console.log('Users only:', this.usersOnly.length);
         console.log('Organizers only:', this.organizersOnly.length);
-        console.log('Organizers data:', this.organizersOnly);
-
-        // إذا لم يكن هناك منظمين، نعرض رسالة
-        if (this.organizersOnly.length === 0) {
-          console.warn('No organizers found in the data');
-        }
 
         this.filteredUsers = [...this.usersOnly];
 
+        // جلب الأحداث وربطها بالمنظمين
         this._AppService.getevents().subscribe({
           next: (events: AppEvent[]) => {
             console.log('Events data:', events);
-            console.log(
-              'Events with organizers:',
-              events.filter((e) => e.organizer)
-            );
 
-
-            // تحديث المنظمين المعروضين
-            console.log('Filtered organizers:', this.filteredOrganizers);
-
-            // إذا لم يكن هناك منظمين مع أحداث، نعرض المنظمين بدون أحداث
-            if (
-              this.organizersOnly.length > 0
-            ) {
-              console.log(
-                'No organizers with events found, showing all organizers'
+            this.filteredOrganizers = this.organizersOnly.map((org) => {
+              const orgEvents = events.filter((e) =>
+                typeof e.organizer === 'string'
+                  ? e.organizer === org._id
+                  : e.organizer?._id === org._id
               );
+              return {
+                id: org._id,
+                firstName: org.firstName,
+                email: org.email,
+                organizationName: (org as any).organizationName || '',
+                eventNames: orgEvents.map((e) => e.title),
+                eventsCount: orgEvents.length,
+              };
+            });
 
-
-            }
+            console.log('Filtered organizers:', this.filteredOrganizers);
           },
           error: (err) => {
             console.error('Error fetching events:', err);
@@ -104,6 +98,7 @@ export class UsersComponent implements OnInit {
   filterUsers() {
     if (!this.searchTerm.trim()) {
       this.filteredUsers = [...this.usersOnly];
+      this.filteredOrganizers = [...this.filteredOrganizers];
     } else {
       const searchLower = this.searchTerm.toLowerCase();
 
@@ -115,11 +110,12 @@ export class UsersComponent implements OnInit {
           user.email?.toLowerCase().includes(searchLower)
       );
 
-      // this.filteredOrganizers = this.organizersOnly.filter(
-      //   (org) =>
-      //     org.firstName?.toLowerCase().includes(searchLower) ||
-      //     org.email?.toLowerCase().includes(searchLower)
-      // );
+      this.filteredOrganizers = this.filteredOrganizers.filter(
+        (org) =>
+          org.firstName?.toLowerCase().includes(searchLower) ||
+          org.email?.toLowerCase().includes(searchLower) ||
+          org.organizationName?.toLowerCase().includes(searchLower)
+      );
     }
   }
 

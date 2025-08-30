@@ -68,21 +68,27 @@ export class DashboardComponent implements OnInit {
         return of([]);
       }));
 
-    const events$ = this.http.get<AppEvent[]>('http://localhost:5000/api/events', { headers })
-      .pipe(catchError(error => {
-        console.error('Error loading events:', error);
-        return of([]);
-      }));
+    const events$ = this.http
+      .get<{ events: AppEvent[] }>('http://localhost:5000/api/events', {
+        headers,
+      })
+      .pipe(
+        catchError((error) => {
+          console.error('Error loading events:', error);
+          return of({ events: [] });
+        })
+      );
+
 
     forkJoin([users$, tickets$, events$]).subscribe({
-      next: ([users, tickets, events]) => {
-        console.log('Dashboard data loaded:', { users, tickets, events });
-
+      next: ([users, tickets, eventsResponse]) => {
+        console.log('Dashboard data loaded:', { users, tickets, eventsResponse });
+        const events = eventsResponse?.events || [];
         // Set chart data
         this.chartData.set([
           { name: 'Users', value: users?.length || 0 },
           { name: 'Tickets', value: tickets?.length || 0 },
-          { name: 'Events', value: events?.length || 0 },
+          { name: 'Events', value: eventsResponse?.events?.length || 0 },
         ]);
 
         // Set users line chart data
@@ -105,7 +111,7 @@ export class DashboardComponent implements OnInit {
           console.log('Processing events:', events);
 
           const sortedEvents = events
-            .filter(event => {
+            .filter((event) => {
               // Check if event has required properties
               if (!event) {
                 console.warn('Event is null or undefined');
@@ -145,7 +151,7 @@ export class DashboardComponent implements OnInit {
         this.hasError.set(true);
         this.isLoading.set(false);
         this.spinner.hide();
-      }
+      },
     });
   }
 

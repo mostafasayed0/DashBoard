@@ -100,20 +100,19 @@
                     <div class="user-avatar">
                       <i class="fas fa-user"></i>
                     </div>
-                    <span class="user-name">{{ user?.name || user?.userName }}</span>
+                    <span class="user-name">{{ user?.name || user?.userName || user?.firstName }}</span>
                   </div>
                 </td>
                 <td>
                   <div class="email-info">
                     <i class="fas fa-envelope me-2"></i>
-                    {{ user.email }}
+                    {{ user?.email }}
                   </div>
                 </td>
                 <td class="text-center">
                   <span class="tickets-badge">
                     <i class="fas fa-ticket-alt me-1"></i>
-                    {{ user.ticketsBooked.length || 0 }}
-
+                    {{ user?.ticketsBooked?.length || 0 }}
                   </span>
                 </td>
               </tr>
@@ -156,19 +155,19 @@
                     <div class="user-avatar organizer-avatar">
                       <i class="fas fa-user-tie"></i>
                     </div>
-                    <span class="user-name">{{  user.firstName }} </span>
+                    <span class="user-name">{{ user?.firstName || user?.name || user?.userName }}</span>
                   </div>
                 </td>
                 <td>
                   <div class="email-info">
                     <i class="fas fa-envelope me-2"></i>
-                    {{ user.email }}
+                    {{ user?.email }}
                   </div>
                 </td>
                 <td class="text-center">
                   <span class="events-badge">
                     <i class="fas fa-calendar me-1"></i>
-                    {{ user.eventsCount }}
+                    {{ user?.eventsCount || 0 }}
                   </span>
                 </td>
               </tr>

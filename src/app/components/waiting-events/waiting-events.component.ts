@@ -34,17 +34,17 @@ export class WaitingEventsComponent implements OnInit {
     });
   }
 
-  onApprove(event:any) {
-    this._AppService.approveEvent(event._id, 'true').subscribe({
+  onApprove(eventId: string) {
+    this._AppService.approveEvent(eventId, true).subscribe({
       next: (res: any) => {
         console.log('Approved:', res);
 
-        // 1️⃣ شيل الحدث من قائمة النوتفكيشن
+        // شيل الحدث من قائمة النوتيفيكشن
         this.notifications = this.notifications.filter(
-          (n) => n.data?.eventId !== event._id
+          (n) => n.data?.eventId !== eventId
         );
 
-        // 2️⃣ ضيف الحدث الموافق عليه للـ EventsComponent عبر BehaviorSubject
+        // ضيف الحدث الموافق عليه للـ EventsComponent عبر BehaviorSubject
         const approvedEvent: AppEvent = res.event;
         const currentApproved = this._AppService.approvedEvents$.value;
         this._AppService.approvedEvents$.next([
@@ -56,17 +56,17 @@ export class WaitingEventsComponent implements OnInit {
     });
   }
 
-  onReject(eventId: string) {
-    this._AppService.approveEvent(eventId, 'false').subscribe({
-      next: (res) => {
-        console.log('Rejected:', res);
+  // onReject(eventId: string) {
+  //   this._AppService.approveEvent(eventId, 'false').subscribe({
+  //     next: (res) => {
+  //       console.log('Rejected:', res);
 
-        // شيل الحدث من قائمة النوتفكيشن
-        this.notifications = this.notifications.filter(
-          (n) => n.data?.eventId !== eventId
-        );
-      },
-      error: (err) => console.error('Rejection error:', err),
-    });
-  }
+  //       // شيل الحدث من قائمة النوتفكيشن
+  //       this.notifications = this.notifications.filter(
+  //         (n) => n.data?.eventId !== eventId
+  //       );
+  //     },
+  //     error: (err) => console.error('Rejection error:', err),
+  //   });
+  // }
 }

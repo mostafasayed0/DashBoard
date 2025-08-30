@@ -116,11 +116,15 @@
           </div>
 
           <!-- Event Image -->
-          @if (event.images && event.images.length > 0) {
-            <div class="event-image">
-              <img [src]="event.images[0]" [alt]="event.title" class="img-fluid">
-            </div>
-          }
+          <!-- Event Image -->
+<div class="event-image">
+  <img 
+    [src]="event.images && event.images.length > 0 ? event.images[0] : 'assets/events.jpg'" 
+    [alt]="event.title" 
+    class="img-fluid"
+    (error)="onImageError($event)">
+</div>
+
 
           <div class="event-card-body">
             <h5 class="event-title">{{ event.title }}</h5>

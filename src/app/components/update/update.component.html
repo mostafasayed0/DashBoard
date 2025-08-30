@@ -1,37 +1,34 @@
-@if(formUpdate)
-{
-  <div class="card mt-4 p-4 shadow-sm">
-    <h5 class="mb-3 text-primary">✏️ Edit Event</h5>
+<div class="card mt-4 p-4 shadow-sm" *ngIf="formUpdate">
+  <h5 class="mb-3 text-primary">✏️ Edit Event</h5>
 
-    <form [formGroup]="formUpdate" (ngSubmit)="onSubmit()">
-      <div class="mb-3">
-        <label class="form-label">Name</label>
-        <input formControlName="name" class="form-control" />
+  <form [formGroup]="formUpdate" (ngSubmit)="onSubmit()">
+    
+    <div class="mb-3">
+      <label class="form-label">Title</label>
+      <input formControlName="title" class="form-control" />
+      <div *ngIf="formUpdate.get('title')?.touched && formUpdate.get('title')?.invalid" class="text-danger">
+        Title is required (min 3 characters)
       </div>
+    </div>
 
-      <div class="mb-3">
-        <label class="form-label">Location</label>
-        <input formControlName="location" class="form-control" />
+    <div class="mb-3">
+      <label class="form-label">Date</label>
+      <input type="date" formControlName="date" class="form-control" />
+      <div *ngIf="formUpdate.get('date')?.touched && formUpdate.get('date')?.invalid" class="text-danger">
+        Date is required
       </div>
+    </div>
 
-      <div class="mb-3">
-        <label class="form-label">Date</label>
-        <input type="date" formControlName="date" class="form-control" />
+    <div class="mb-3">
+      <label class="form-label">Time</label>
+      <input type="time" formControlName="time" class="form-control" />
+      <div *ngIf="formUpdate.get('time')?.touched && formUpdate.get('time')?.invalid" class="text-danger">
+        Time is required
       </div>
+    </div>
 
-      <div class="mb-3">
-        <label class="form-label">Time</label>
-        <input type="time" formControlName="time" class="form-control" />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Available Spots</label>
-        <input type="number" formControlName="availableSpots" class="form-control" />
-      </div>
-
-      <div class="d-flex justify-content-end gap-2">
-        <button type="submit" class="btn btn-outline-success p-2" [disabled]="formUpdate.invalid">💾 Save</button>
-      </div>
-    </form>
-  </div>
-}
+    <div class="d-flex justify-content-end gap-2">
+      <button type="submit" class="btn btn-outline-success p-2" [disabled]="formUpdate.invalid">💾 Save</button>
+    </div>
+  </form>
+</div>

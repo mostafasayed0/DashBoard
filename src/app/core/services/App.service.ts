@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, map } from 'rxjs';
 import { environment } from '../../environment/environment';
 import { AppEvent } from '../interfaces/event';
 import { User } from '../interfaces/user';
@@ -14,6 +14,7 @@ export class AppService {
   // BehaviorSubject لتخزين الأحداث المعتمدة حديثًا
   private approvedEventsSubject = new BehaviorSubject<AppEvent[]>([]);
   public approvedEvents$ = new BehaviorSubject<AppEvent[]>([]);
+
   constructor(private _HttpClient: HttpClient) {}
 
   getusers(): Observable<any> {
@@ -38,25 +39,31 @@ export class AppService {
 
   getevents(): Observable<AppEvent[]> {
     const token = localStorage.getItem('userToken');
-    return this._HttpClient.get<AppEvent[]>(
-      `${environment.BASE_URL}/api/events`,
-      {
+    return this._HttpClient
+      .get<{ events: AppEvent[] }>(`${environment.BASE_URL}/api/events`, {
         headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+      })
+      .pipe(map((res) => res.events || []));
   }
 
   searchEvents(query: string): Observable<AppEvent[]> {
     const token = localStorage.getItem('userToken');
-    return this._HttpClient.get<AppEvent[]>(
-      `${environment.BASE_URL}/api/events/search?q=${encodeURIComponent(query)}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    return this._HttpClient
+      .get<{ events: AppEvent[] }>(
+        `${environment.BASE_URL}/api/events/search?q=${encodeURIComponent(
+          query
+        )}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .pipe(map((res) => res.events || []));
   }
 
-  getEventsWithPagination(page: number = 1, limit: number = 10): Observable<any> {
+  getEventsWithPagination(
+    page: number = 1,
+    limit: number = 10
+  ): Observable<any> {
     const token = localStorage.getItem('userToken');
     return this._HttpClient.get<any>(
       `${environment.BASE_URL}/api/events?page=${page}&limit=${limit}`,
@@ -65,8 +72,6 @@ export class AppService {
       }
     );
   }
-
-
 
   getTickets(): Observable<Tickets[]> {
     const token = localStorage.getItem('userToken');
@@ -96,10 +101,10 @@ export class AppService {
     );
   }
 
-  updateEvent(event: AppEvent, id: string): Observable<any> {
+  updateEvent(event: Partial<AppEvent>, id: string): Observable<AppEvent> {
     const token = localStorage.getItem('userToken');
-    return this._HttpClient.patch(
-      `${environment.BASE_URL}/api/events/${id}`,
+    return this._HttpClient.patch<AppEvent>(
+      `${environment.BASE_URL}/api/events/edit/${id}`,
       event,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -108,40 +113,41 @@ export class AppService {
   }
 
   deleteEvent(id: string): Observable<any> {
+    const token = localStorage.getItem('userToken');
     return this._HttpClient.delete(`${environment.BASE_URL}/api/events/${id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('userToken')}` },
+      headers: { Authorization: `Bearer ${token}` },
     });
   }
 
   createEvent(event: Partial<AppEvent>): Observable<any> {
     const token = localStorage.getItem('userToken');
-    return this._HttpClient.post(
-      `${environment.BASE_URL}/api/events`,
-      event,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    return this._HttpClient.post(`${environment.BASE_URL}/api/events`, event, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   }
 
   getEventsByCategory(category: string): Observable<AppEvent[]> {
     const token = localStorage.getItem('userToken');
-    return this._HttpClient.get<AppEvent[]>(
-      `${environment.BASE_URL}/api/events?category=${category}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    return this._HttpClient
+      .get<{ events: AppEvent[] }>(
+        `${environment.BASE_URL}/api/events?category=${category}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .pipe(map((res) => res.events || []));
   }
 
   getUpcomingEvents(): Observable<AppEvent[]> {
     const token = localStorage.getItem('userToken');
-    return this._HttpClient.get<AppEvent[]>(
-      `${environment.BASE_URL}/api/events?upcoming=true`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    return this._HttpClient
+      .get<{ events: AppEvent[] }>(
+        `${environment.BASE_URL}/api/events?upcoming=true`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .pipe(map((res) => res.events || []));
   }
 
   updateEventStatus(eventId: string, status: string): Observable<any> {
@@ -159,7 +165,7 @@ export class AppService {
     const token = localStorage.getItem('userToken');
     const formData = new FormData();
     formData.append('image', imageFile);
-    
+
     return this._HttpClient.post(
       `${environment.BASE_URL}/api/events/${eventId}/images`,
       formData,
@@ -175,33 +181,18 @@ export class AppService {
       `${environment.BASE_URL}/api/events/${eventId}/images`,
       {
         headers: { Authorization: `Bearer ${token}` },
-        body: { imageUrl }
+        body: { imageUrl },
       }
     );
   }
 
-  approveEvent(eventId: string, action: string): Observable<any> {
+  approveEvent(eventId: string, approved: boolean): Observable<any> {
     const token = localStorage.getItem('userToken');
-    return new Observable((observer) => {
-      this._HttpClient
-        .post(
-          `${environment.BASE_URL}/user/approveEvent`,
-          { eventId, action },
-          { headers: { Authorization: `Bearer ${token}` } }
-        )
-        .subscribe({
-          next: (res: any) => {
-            // إذا الحدث تم الموافقة عليه (accept) ضيفه للـ approvedEventsSubject
-            if (action === 'accept' && res?.event) {
-              const current = this.approvedEventsSubject.value;
-              this.approvedEventsSubject.next([...current, res.event]);
-            }
-            observer.next(res);
-            observer.complete();
-          },
-          error: (err) => observer.error(err),
-        });
-    });
+    return this._HttpClient.post(
+      `${environment.BASE_URL}/user/approveEvent`,
+      { id: eventId, approved }, // هنا id لازم يطابق eventId
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
   }
 
   getEventTicketStats(): Observable<EventTicketStats[]> {
@@ -223,14 +214,23 @@ export class AppService {
       this.getevents().subscribe((events) => {
         const stats = {
           totalEvents: events.length,
-          upcomingEvents: events.filter(e => e.upcoming).length,
-          publishedEvents: events.filter(e => e.status === 'published').length,
-          approvedEvents: events.filter(e => e.approved).length,
-          totalAttendees: events.reduce((sum, e) => sum + e.currentAttendees, 0),
+          upcomingEvents: events.filter((e) => e.upcoming).length,
+          publishedEvents: events.filter((e) => e.status === 'published')
+            .length,
+          approvedEvents: events.filter((e) => e.approved).length,
+          totalAttendees: events.reduce(
+            (sum, e) => sum + e.currentAttendees,
+            0
+          ),
           totalCapacity: events.reduce((sum, e) => sum + e.maxAttendees, 0),
-          categories: [...new Set(events.map(e => e.category))],
-          averageAttendance: events.length > 0 ? 
-            Math.round(events.reduce((sum, e) => sum + e.currentAttendees, 0) / events.length) : 0
+          categories: [...new Set(events.map((e) => e.category))],
+          averageAttendance:
+            events.length > 0
+              ? Math.round(
+                  events.reduce((sum, e) => sum + e.currentAttendees, 0) /
+                    events.length
+                )
+              : 0,
         };
         observer.next(stats);
         observer.complete();
