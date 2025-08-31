@@ -60,7 +60,6 @@ export class TicketsComponent implements OnInit {
 
   calculateStats() {
     this.totalEvents = this.events.length;
-    this.totalTickets = this.events.reduce((sum, event) => sum + event.totalTickets, 0);
     this.totalReserved = this.events.reduce((sum, event) => sum + event.reservedTickets, 0);
     this.totalAvailable = this.events.reduce((sum, event) => sum + event.availableTickets, 0);
   }

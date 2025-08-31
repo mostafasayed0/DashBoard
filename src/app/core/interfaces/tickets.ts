@@ -3,6 +3,7 @@ export interface Tickets {
   eventId: string;
   userId: number;
   status: string;
+  reservedTickets:number;
   purchaseDate?: string;
   price?: number;
 }

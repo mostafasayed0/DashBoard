@@ -3,6 +3,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from '../../core/services/App.service';
 import { AppEvent } from '../../core/interfaces/event';
 import { DatePipe } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-waiting-events',
@@ -15,7 +16,7 @@ export class WaitingEventsComponent implements OnInit {
   notifications: any[] = [];
 
   private spinner = inject(NgxSpinnerService);
-
+  private toaster=inject(ToastrService)
   constructor(private _AppService: AppService) {}
 
   ngOnInit(): void {
@@ -35,6 +36,7 @@ export class WaitingEventsComponent implements OnInit {
   }
 
   onApprove(eventId: string) {
+    this.toaster.success('Add Event successfully');
     this._AppService.approveEvent(eventId, true).subscribe({
       next: (res: any) => {
         console.log('Approved:', res);

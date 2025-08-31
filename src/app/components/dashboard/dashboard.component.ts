@@ -82,13 +82,22 @@ export class DashboardComponent implements OnInit {
 
     forkJoin([users$, tickets$, events$]).subscribe({
       next: ([users, tickets, eventsResponse]) => {
-        console.log('Dashboard data loaded:', { users, tickets, eventsResponse });
+        console.log('Dashboard data loaded:', {
+          users,
+          tickets,
+          eventsResponse,
+        });
         const events = eventsResponse?.events || [];
+
         // Set chart data
         this.chartData.set([
           { name: 'Users', value: users?.length || 0 },
-          { name: 'Tickets', value: tickets?.length || 0 },
-          { name: 'Events', value: eventsResponse?.events?.length || 0 },
+          {
+            name: 'Tickets (Reserved)',
+            value: tickets.filter((ticket) => ticket.status === 'reserved')
+              .length,
+          },
+          { name: 'Events', value: events?.length || 0 },
         ]);
 
         // Set users line chart data
@@ -104,7 +113,9 @@ export class DashboardComponent implements OnInit {
         // Set counts
         this.usersCount.set(users?.length || 0);
         this.eventsCount.set(events?.length || 0);
-        this.ticketsCount.set(tickets?.length || 0);
+        this.ticketsCount.set(
+          tickets.filter((ticket) => ticket.status === 'reserved').length
+        );
 
         // Set latest events with better error handling
         if (events && Array.isArray(events) && events.length > 0) {
@@ -112,14 +123,12 @@ export class DashboardComponent implements OnInit {
 
           const sortedEvents = events
             .filter((event) => {
-              // Check if event has required properties
               if (!event) {
                 console.warn('Event is null or undefined');
                 return false;
               }
-              // Check if event has either title or name
               if (!event.title && !event.title) {
-                console.warn('Event missing title and name:', event);
+                console.warn('Event missing title or name:', event);
                 return false;
               }
               return true;
@@ -153,6 +162,7 @@ export class DashboardComponent implements OnInit {
         this.spinner.hide();
       },
     });
+
   }
 
   getUsersPerMonth(users: User[]): { name: string; value: number }[] {
