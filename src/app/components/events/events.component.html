@@ -77,14 +77,6 @@
         <i class="fas fa-calendar me-2"></i>
         {{ 'events.Oldest First' | translate }}
       </button>
-      <button class="btn btn-outline-primary btn-sm" (click)="sortByAttendees()">
-        <i class="fas fa-users me-2"></i>
-        {{ 'events.Most Popular' | translate }}
-      </button>
-      <button class="btn btn-outline-primary btn-sm" (click)="sortByAvailableSpots()">
-        <i class="fas fa-ticket-alt me-2"></i>
-        {{ 'events.Most Available' | translate }}
-      </button>
     </div>
   </div>
 </div>
@@ -112,9 +104,9 @@
           <!-- Event Image -->
           <!-- Event Image -->
 <div class="event-image">
-  <img 
-    [src]="event.images && event.images.length > 0 ? event.images[0] : 'assets/events.jpg'" 
-    [alt]="event.title" 
+  <img
+    [src]="event.images && event.images.length > 0 ? event.images[0] : 'assets/events.jpg'"
+    [alt]="event.title"
     class="img-fluid"
     (error)="onImageError($event)">
 </div>
